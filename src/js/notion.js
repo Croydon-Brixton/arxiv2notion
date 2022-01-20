@@ -49,13 +49,14 @@ export default class Notion {
     const data = await _data;
     const databaseId = document.getElementById("js-select-database").value;
     const title = data.title;
+    const published = data.published; 
     const abst = data.abst;
     const paperUrl = data.url;
     const authorsFormatted = data.authors.join(",");
 
     try {
       const url = this.apiBase + "pages";
-      const parent = {
+      const parent = {  // Note: This sets the parent to the selected database
         type: "database_id",
         database_id: databaseId,
       };
@@ -65,10 +66,34 @@ export default class Notion {
           type: "title",
           title: [{ text: { content: title } }],
         },
-        Publisher: {
-          id: "conference",
+        Status: {
+          id: "status",
           type: "select",
-          select: { name: "arXiv" },
+          select: { name: "backlog" },
+        },
+        Usefulness: {
+          id: "status",
+          type: "select",
+          select: { name: "not assessed" },
+        },
+        ArticleType: {
+          id: "article_type",
+          type: "select",
+          select: { name: "article" },
+        },
+        Journal: {
+          id: "journal",
+          type: "multi_select", 
+          multi_select: [
+            { name: "arXiv" }
+          ],
+        },
+        Released: {
+          id: "released",
+          type: "date",
+          "date": {
+              "start": published
+          }
         },
         URL: {
           id: "url",
@@ -119,7 +144,7 @@ export default class Notion {
 
       const body = {
         parent: parent,
-        properties: properties,
+        properties: properties
       };
       const res = await fetch(url, {
         method: "POST",

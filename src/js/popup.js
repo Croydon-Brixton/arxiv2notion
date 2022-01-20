@@ -116,6 +116,7 @@ class UI {
 
     const entry = xmlData.querySelector("entry");
     const paperTitle = entry.querySelector("title").textContent;
+    const published = entry.querySelector("published").textContent;
     const abst = entry.querySelector("summary").textContent;
     const authors = Array.from(entry.querySelectorAll("author")).map(
       (author) => {
@@ -123,8 +124,8 @@ class UI {
       }
     );
 
-    this.setFormContents(paperTitle, abst, authors);
-    return { title: paperTitle, abst: abst, authors: authors, url: url };
+    this.setFormContents(paperTitle, abst, authors, published);
+    return { title: paperTitle, abst: abst, authors: authors, url: url, published: published };
   }
 
   renderMessage(type, message, overwrite = false) {
